@@ -1,0 +1,97 @@
+}---
+- name: crear_usuario
+  hosts: instance
+  become: yes
+
+ 
+
+  vars_prompt:
+    - name: "user_password"
+      prompt: "ingrese una contraseña"
+      private: yes
+      encrypt: "md5_crypt"
+      confirm: yes
+      salt_size: 8
+
+ 
+
+  tasks:
+
+ 
+
+   - name: listar grupo
+     command: cat /etc/group
+     register: grupos
+     tags:
+     - grupos
+
+ 
+
+   - name: mostrar grupos
+     debug: var=grupos.stdout_lines
+     tags:
+     - grupos
+
+ 
+
+
+   - name: listar usuarios
+     command: cat /etc/passwd
+     register: usuarios
+     tags:
+     - usuarios
+
+ 
+
+   - name: mostrar usuarios
+     debug: var=usuarios.stdout_lines
+     tags:
+     - usuarios
+
+ 
+
+   - name: Crear usuario
+     user:
+       name: webinar
+       password: "{{user_password}}"
+       shell: /bin/bash
+       groups: grupo1
+       append: yes
+     register: newuser
+     tags:
+     - crear
+
+ 
+
+   - name: remover usuario
+     user:
+       name: webinar
+       shell: /bin/bash
+       state: absent
+       remove: yes
+     tags:
+     - eliminar
+
+ 
+
+   - name: instalar apache
+     yum:
+       name: httpd
+       state: present
+     tags:
+     - apache
+
+ 
+
+   - name: validar version
+     command: httpd -v
+     register: version
+     tags:
+     - version
+
+ 
+
+   - name: mostrar version del apache
+     debug: var=version.stdout_lines
+     tags:
+     - version 

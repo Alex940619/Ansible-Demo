@@ -1,0 +1,17 @@
+---
+- name: Service REST
+  hosts: localhost
+  become: yes
+
+  tasks:
+   - name: Connection to a URL
+     uri:
+       url: https://dev.azure.com/johanmoreno/PruebaAnsible
+       url_username: johanmoreno@cbit-online.com
+       body_format: json
+       method: GET
+       return_content: yes
+     register: get_content
+   
+   - debug:
+       var: get_content.get('status')

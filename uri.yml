@@ -1,0 +1,19 @@
+---
+- name: Service REST
+  hosts: localhost
+  become: yes
+
+  tasks:
+   - name: Connection to a URL
+     uri:
+       url: https://httpbin.org/get
+  
+   - name: GET to URL
+     uri:
+       url: https://httpbin.org/get
+       method: GET
+       return_content: yes
+     register: get_content
+   
+   - debug:
+       var: get_content.get('json').get('headers').get('User-Agent')

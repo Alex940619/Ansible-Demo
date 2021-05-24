@@ -1,0 +1,44 @@
+---
+- name: Clon Git
+  hosts: localhost
+  become: yes
+
+  vars_prompt:
+   - name: "rama"
+     prompt: "Ingrese la rama a desplegar"
+     private: no
+     default: master
+
+   - name: "version"
+     prompt: "ingrese la version"
+     private: no
+     default: v_0
+
+  vars:
+   - repositorio: "https://github.com/abcnick/Prueba-pipeline.git"
+
+   - proy_codigo: "/home/desarrollo1/ansible-proyecto/ansible-proyecto-codigo"
+
+  tasks:
+   - name: Fecha
+     command: "date '+%Y-%m-%dT%H:%M:%S'"
+     register: date_gmt
+     environment:
+       TZ: GMT+5
+
+   - name: Clone Repo
+     git:
+       repo: "{{ repositorio }}"
+       version: "{{ rama }}"
+       dest: "{{ proy_codigo }}"
+       key_file: /etc/ssh/accessazure
+       accept_hostkey: yes
+
+   - name: Last Commit
+     command: git log -1
+     register: infocommit
+     args:
+       chdir: "{{ proy_codigo }}"
+
+   - name: Mensaje Commit
+     debug: var=infocommit.stdout_lines

@@ -1,0 +1,13 @@
+---
+- name: Clone a git repo
+  hosts: localhost
+  become: yes
+
+  tasks:
+   - name: git
+     git:
+       repo: PeriferiaItGroupTFS@vs-ssh.visualstudio.com:v3/PeriferiaItGroupTFS/Patterns%20And%20Partners/aportes-en-linea
+       dest: /etc/ansible/archivos
+       key_file: /etc/ssh/accessazure
+       accept_hostkey: yes
+       force: yes

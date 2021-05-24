@@ -1,0 +1,40 @@
+---
+- name: Prueba openshift
+  hosts: instance
+
+  vars:
+   - dir_openshift: "/home/desarrollo/openshift/crc-linux-1.23.1-amd64"
+
+  tasks:
+   - name: estado Openshift
+     command: crc status
+     register: status
+     args:
+       chdir: "{{ dir_openshift }}"
+     tags:
+     - estado
+
+   - name: dates validate
+     debug: var=status
+
+   - name: ip Openshift
+     command: crc ip
+     register: ip
+     args:
+       chdir: "{{ dir_openshift }}"
+     tags:
+     - ip
+
+   - name: dates ip
+     debug: var=ip
+
+   - name: version Openshift
+     command: crc version
+     register: version
+     args:
+       chdir: "{{ dir_openshift }}"
+     tags:
+     - version
+
+   - name: dates version
+     debug: var=version

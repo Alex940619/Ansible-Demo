@@ -1,0 +1,13 @@
+---
+- name: ansible vault - clone repository
+  hosts: localhost
+  become: yes
+  vars_files:
+    - vault-pass.yml
+
+  tasks:
+   - name: Clone Repo
+     git:
+       repo: https://abcnick:{{ password }}@github.com/abcnick/Prueba-pipeline.git
+       version: master
+       dest: /home/desarrollo1/ansible-vault

@@ -1,0 +1,25 @@
+---
+- name: Instalacion de apache
+  hosts: instance
+  become: yes
+
+
+  tasks:
+
+   - name: instalar apache
+     yum:
+       name: httpd
+       state: present
+     tags:
+     - apache
+
+   - name: validar version
+     command: httpd -v
+     register: version
+     tags:
+     - version
+
+   - name: mostrar version del apache
+     debug: var=version.stdout_lines
+     tags:
+     - version
